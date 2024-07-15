@@ -55,7 +55,7 @@
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <canvas id="gameCanvas" width="800" height="300"></canvas>
     <div class="controls">
         <div class="arrow-buttons">
             <button id="up">↑</button>
@@ -74,7 +74,7 @@
 
         let tank1 = { x: 100, y: 100, direction: 0 }; // 0: phải, 1: dưới, 2: trái, 3: trên
         let bullets = [];
-        let monsters = [{ x: 400, y: 300, size: 30, direction: getRandomDirection() }];
+        let monsters = [{ x: 200, y: 100, size: 30, direction: getRandomDirection() }];
         
         let moving = { up: false, down: false, left: false, right: false };
 
