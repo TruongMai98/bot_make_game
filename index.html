@@ -11,6 +11,7 @@
             height: 100vh;
             margin: 0;
             background-color: #f0f0f0;
+            overflow: hidden; /* Ẩn thanh cuộn */
         }
         canvas {
             border: 1px solid black;
@@ -35,20 +36,20 @@
             margin-top: 5px;
         }
         button {
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
             cursor: pointer;
             margin: 5px;
         }
         #left {
-            margin-right: 50px;
+            margin-right: 40px;
         }
         #shoot {
             position: absolute;
             bottom: 20px;
             right: 20px;
-            padding: 15px;
+            padding: 10px;
             font-size: 16px;
         }
     </style>
@@ -139,20 +140,35 @@
             }
         }
 
-        // Thêm sự kiện cho các nút
+        // Thêm sự kiện cho các nút sử dụng touchstart và touchend cho thiết bị di động
         document.getElementById('up').addEventListener('mousedown', () => { moving.up = true; tank1.direction = 3; });
         document.getElementById('down').addEventListener('mousedown', () => { moving.down = true; tank1.direction = 1; });
         document.getElementById('left').addEventListener('mousedown', () => { moving.left = true; tank1.direction = 2; });
         document.getElementById('right').addEventListener('mousedown', () => { moving.right = true; tank1.direction = 0; });
-
+        
         document.getElementById('up').addEventListener('mouseup', () => { moving.up = false; });
         document.getElementById('down').addEventListener('mouseup', () => { moving.down = false; });
         document.getElementById('left').addEventListener('mouseup', () => { moving.left = false; });
         document.getElementById('right').addEventListener('mouseup', () => { moving.right = false; });
-
+        
+        // Thêm sự kiện cho thiết bị di động
+        document.getElementById('up').addEventListener('touchstart', () => { moving.up = true; tank1.direction = 3; });
+        document.getElementById('down').addEventListener('touchstart', () => { moving.down = true; tank1.direction = 1; });
+        document.getElementById('left').addEventListener('touchstart', () => { moving.left = true; tank1.direction = 2; });
+        document.getElementById('right').addEventListener('touchstart', () => { moving.right = true; tank1.direction = 0; });
+        
+        document.getElementById('up').addEventListener('touchend', () => { moving.up = false; });
+        document.getElementById('down').addEventListener('touchend', () => { moving.down = false; });
+        document.getElementById('left').addEventListener('touchend', () => { moving.left = false; });
+        document.getElementById('right').addEventListener('touchend', () => { moving.right = false; });
+        
         document.getElementById('shoot').addEventListener('click', () => {
             bullets.push({ x: tank1.x, y: tank1.y, direction: tank1.direction });
         });
+        document.getElementById('shoot').addEventListener('touchstart', () => {
+            bullets.push({ x: tank1.x, y: tank1.y, direction: tank1.direction });
+        });
+
 
         update();
         
