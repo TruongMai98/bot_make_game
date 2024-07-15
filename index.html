@@ -74,6 +74,7 @@
 
         let tank1 = { x: 100, y: 100, direction: 0 }; // 0: phải, 1: dưới, 2: trái, 3: trên
         let bullets = [];
+        let monsters = [{ x: 400, y: 300, size: 30, direction: getRandomDirection() }];
         
         let moving = { up: false, down: false, left: false, right: false };
 
@@ -98,17 +99,65 @@
             ctx.fillRect(bullet.x, bullet.y, 5, 5);
         }
 
+        function drawMonster(monster) {
+            ctx.fillStyle = 'purple';
+            ctx.fillRect(monster.x - monster.size / 2, monster.y - monster.size / 2, monster.size, monster.size);
+        }
+
+        function spawnMonster() {
+            let x = Math.random() * (canvas.width - 60) + 30;
+            let y = Math.random() * (canvas.height - 60) + 30;
+            monsters.push({ x: x, y: y, size: 30, direction: getRandomDirection() });
+        }
+
+        function getRandomDirection() {
+            return Math.floor(Math.random() * 4); // 0: phải, 1: dưới, 2: trái, 3: trên
+        }
+
+        function moveMonster(monster) {
+            switch (monster.direction) {
+                case 0: monster.x += 2; break; // phải
+                case 1: monster.y += 2; break; // dưới
+                case 2: monster.x -= 2; break; // trái
+                case 3: monster.y -= 2; break; // trên
+            }
+
+            // Đổi hướng nếu quái vật chạm biên
+            if (monster.x <= 0 || monster.x >= canvas.width || monster.y <= 0 || monster.y >= canvas.height) {
+                monster.direction = getRandomDirection();
+            }
+        }
+
+
         function update() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawTank(tank1);
-            bullets.forEach(bullet => {
+            bullets.forEach((bullet, index) => {
                 switch (bullet.direction) {
                     case 0: bullet.x += 5; break; // phải
                     case 1: bullet.y += 5; break; // dưới
                     case 2: bullet.x -= 5; break; // trái
-                    case 3: bullet.y -= 5; break; // trên
+                    case 3: bullet.y -= 5; break;
                 }
+                // Kiểm tra va chạm với quái vật
+                monsters.forEach((monster, monsterIndex) => {
+                    if (
+                        bullet.x >= monster.x - monster.size / 2 &&
+                        bullet.x <= monster.x + monster.size / 2 &&
+                        bullet.y >= monster.y - monster.size / 2 &&
+                        bullet.y <= monster.y + monster.size / 2
+                    ) {
+                        bullets.splice(index, 1); // Xóa đạn khi va chạm
+                        monsters.splice(monsterIndex, 1); // Xóa quái vật khi va chạm
+                        spawnMonster(); // Tạo ra quái vật mới
+                    }
+                });
                 drawBullet(bullet);
+            });
+
+            monsters.forEach(monster => {
+                moveMonster(monster);
+                drawMonster(monster);
             });
 
             if (moving.up) moveTank('up');
@@ -169,9 +218,7 @@
             bullets.push({ x: tank1.x, y: tank1.y, direction: tank1.direction });
         });
 
-
         update();
-        
     </script>
 </body>
 </html>
